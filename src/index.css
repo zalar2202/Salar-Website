@@ -1,0 +1,52 @@
+:root {
+  /* Windows XP Colors */
+  --xp-blue: #245DDA;
+  --xp-blue-gradient-start: #245DDA;
+  --xp-blue-gradient-end: #3F8CF3;
+  --xp-taskbar-start: #1F50B5;
+  --xp-taskbar-end: #4E8FE7;
+  --xp-start-btn-green: #388E3C;
+  /* Approximate */
+  --xp-start-btn-hover: #4CAF50;
+  --xp-bg-color: #ECE9D8;
+  --xp-window-bg: #ECE9D8;
+  --xp-title-text: #FFFFFF;
+  --xp-text-color: #000000;
+
+  font-family: 'Tahoma', 'Segoe UI', sans-serif;
+  font-size: 11px;
+  line-height: 1.5;
+  font-weight: 400;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #3B6EA5;
+  /* Fallback blue */
+  background-image: url('./assets/xp_bliss_salar_wallpaper.png');
+  /* Custom Bliss with Salar text */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  user-select: none;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
