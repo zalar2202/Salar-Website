@@ -4,6 +4,9 @@ import notepadIcon from '../assets/xp_notepad_icon_1764251925686.png';
 import folderIcon from '../assets/xp_folder_icon_1764251985048.png';
 import myComputerIcon from '../assets/xp_my_computer_icon_1764252098649.png';
 import emailIcon from '../assets/xp_email_icon.png';
+import userIcon from '../assets/xp_user_salar.png';
+import logOffIcon from '../assets/xp_icon_logoff.png';
+import turnOffIcon from '../assets/xp_icon_turnoff.png';
 
 interface StartMenuProps {
     isOpen: boolean;
@@ -51,10 +54,11 @@ const StartMenu: React.FC<StartMenuProps> = ({ isOpen, onItemClick }) => {
                     border: '2px solid white',
                     marginRight: '10px',
                     backgroundColor: '#D8E4F8',
-                    backgroundImage: 'none',
-                    backgroundSize: 'cover'
+                    backgroundImage: `url(${userIcon})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center'
                 }} />
-                <span>Guest</span>
+                <span>Salar</span>
             </div>
 
             {/* Body */}
@@ -185,7 +189,7 @@ const StartMenu: React.FC<StartMenuProps> = ({ isOpen, onItemClick }) => {
                     cursor: 'pointer',
                     marginRight: '10px'
                 }}>
-                    <div style={{ width: '20px', height: '20px', backgroundColor: '#E8A22B', marginRight: '5px', borderRadius: '2px' }} />
+                    <img src={logOffIcon} alt="Log Off" style={{ width: '20px', height: '20px', marginRight: '5px' }} />
                     Log Off
                 </button>
                 <button style={{
@@ -196,7 +200,7 @@ const StartMenu: React.FC<StartMenuProps> = ({ isOpen, onItemClick }) => {
                     color: 'white',
                     cursor: 'pointer'
                 }}>
-                    <div style={{ width: '20px', height: '20px', backgroundColor: '#D63529', marginRight: '5px', borderRadius: '2px' }} />
+                    <img src={turnOffIcon} alt="Turn Off" style={{ width: '20px', height: '20px', marginRight: '5px' }} />
                     Turn Off Computer
                 </button>
             </div>
