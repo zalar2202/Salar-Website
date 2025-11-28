@@ -5,14 +5,16 @@ import Desktop from './components/Desktop';
 import DesktopIcon from './components/DesktopIcon';
 import Window from './components/Window';
 import Notepad from './components/apps/Notepad';
+import InternetExplorer from './components/apps/InternetExplorer';
 
 // Assets
-import myComputerIcon from './assets/xp_my_computer_icon_1764252098649.png';
+import myComputerIcon from './assets/xp_my_computer_authentic.png';
 import ieIcon from './assets/xp_ie_icon_1764251910162.png';
 import notepadIcon from './assets/xp_notepad_icon_1764251925686.png';
 import folderIcon from './assets/xp_folder_icon_1764251985048.png';
-// Recycle bin - using folder icon for now
-const recycleBinIcon = folderIcon;
+import recycleBinEmptyIcon from './assets/xp_recycle_bin_empty.png';
+// Recycle bin - using empty icon by default
+const recycleBinIcon = recycleBinEmptyIcon;
 
 interface WindowState {
   id: number;
@@ -28,10 +30,13 @@ function App() {
   const [windows, setWindows] = useState<WindowState[]>([
     {
       id: 1,
-      title: 'Welcome',
+      title: 'My Computer',
       content: (
         <div style={{ padding: '20px', fontFamily: 'Tahoma, sans-serif' }}>
-          <h1 style={{ fontSize: '24px', fontWeight: 'normal', marginBottom: '10px' }}>Welcome to Salar XP</h1>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+            <img src={myComputerIcon} style={{ width: '32px', height: '32px' }} />
+            <h1 style={{ fontSize: '24px', fontWeight: 'normal', margin: 0 }}>Salar XP</h1>
+          </div>
           <p style={{ lineHeight: '1.6', marginBottom: '15px' }}>
             I'm Salar, a multidisciplinary developer focused on web engineering, automation, and infrastructure.
             I build reliable systems, deploy scalable applications, and solve complex technical problems across
@@ -80,7 +85,7 @@ function App() {
     {
       id: 3,
       title: 'Internet Explorer',
-      content: <div style={{ padding: '20px' }}>Internet Explorer is not available. Please use a modern browser.</div>,
+      content: <InternetExplorer />,
       isOpen: false,
       isMinimized: false,
       zIndex: 0,

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import StartMenu from './StartMenu';
-import startButtonImg from '../assets/xp_start_button_1764252000140.png';
+import startButtonImg from '../assets/start_button.svg';
 
 interface TaskbarProps {
     openWindows: { id: number; title: string; minimized: boolean; icon?: string }[];
@@ -37,21 +37,34 @@ const Taskbar: React.FC<TaskbarProps> = ({ openWindows, activeWindowId, onWindow
             <div
                 onClick={() => setIsStartOpen(!isStartOpen)}
                 style={{
-                    width: '100px',
-                    height: '30px',
-                    backgroundImage: `url(${startButtonImg})`,
-                    backgroundSize: 'contain',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'left center',
+                    height: '100%',
+                    width: 'auto',
+                    aspectRatio: '8 / 3',
+                    maxWidth: '100px',
+                    minWidth: '75px',
                     cursor: 'pointer',
                     marginRight: '6px',
+                    marginLeft: '2px',
                     flexShrink: 0,
+                    display: 'flex',
+                    alignItems: 'center',
                     transition: 'filter 0.1s',
                 }}
                 onMouseDown={(e) => e.currentTarget.style.filter = 'brightness(0.9)'}
                 onMouseUp={(e) => e.currentTarget.style.filter = 'brightness(1)'}
                 onMouseLeave={(e) => e.currentTarget.style.filter = 'brightness(1)'}
-            />
+            >
+                <img
+                    src={startButtonImg}
+                    style={{
+                        height: '100%',
+                        width: '100%',
+                        objectFit: 'fill',
+                        display: 'block'
+                    }}
+                    alt="Start"
+                />
+            </div>
 
             {/* Task Area */}
             <div style={{
@@ -59,7 +72,8 @@ const Taskbar: React.FC<TaskbarProps> = ({ openWindows, activeWindowId, onWindow
                 display: 'flex',
                 alignItems: 'center',
                 paddingLeft: '5px',
-                gap: '2px'
+                gap: '2px',
+                overflow: 'hidden'
             }}>
                 {openWindows.map((window) => (
                     <div
@@ -67,6 +81,8 @@ const Taskbar: React.FC<TaskbarProps> = ({ openWindows, activeWindowId, onWindow
                         onClick={() => onWindowClick(window.id)}
                         style={{
                             width: '150px',
+                            minWidth: '60px',
+                            flexShrink: 1,
                             height: '24px',
                             backgroundColor: activeWindowId === window.id ? '#1F50B5' : '#3C81F3',
                             borderRadius: '3px',
@@ -79,7 +95,8 @@ const Taskbar: React.FC<TaskbarProps> = ({ openWindows, activeWindowId, onWindow
                             boxShadow: activeWindowId === window.id
                                 ? 'inset 1px 1px 2px rgba(0,0,0,0.5)'
                                 : 'inset 1px 1px 0 rgba(255,255,255,0.2), 1px 1px 1px rgba(0,0,0,0.3)',
-                            opacity: window.minimized ? 0.8 : 1
+                            opacity: window.minimized ? 0.8 : 1,
+                            overflow: 'hidden'
                         }}
                     >
                         <div style={{
@@ -89,7 +106,8 @@ const Taskbar: React.FC<TaskbarProps> = ({ openWindows, activeWindowId, onWindow
                             backgroundImage: window.icon ? `url(${window.icon})` : 'none',
                             backgroundColor: window.icon ? 'transparent' : '#ccc',
                             backgroundSize: 'contain',
-                            backgroundRepeat: 'no-repeat'
+                            backgroundRepeat: 'no-repeat',
+                            flexShrink: 0
                         }} />
                         <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                             {window.title}
@@ -110,7 +128,8 @@ const Taskbar: React.FC<TaskbarProps> = ({ openWindows, activeWindowId, onWindow
                 color: 'white',
                 fontSize: '11px',
                 padding: '0 10px',
-                boxShadow: 'inset 1px 1px 2px rgba(0,0,0,0.2)'
+                boxShadow: 'inset 1px 1px 2px rgba(0,0,0,0.2)',
+                flexShrink: 0
             }}>
                 {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </div>

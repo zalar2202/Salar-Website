@@ -36,9 +36,9 @@ body {
   overflow: hidden;
   background-color: #3B6EA5;
   /* Fallback blue */
-  background-image: url('./assets/xp_bliss_salar_wallpaper.png');
-  /* Custom Bliss with Salar text */
-  background-size: cover;
+  background-image: url('./assets/xp_bliss_clean.png');
+  /* Clean Bliss wallpaper */
+  background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
   user-select: none;

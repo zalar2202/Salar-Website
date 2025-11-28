@@ -29,7 +29,7 @@ A nostalgic Windows XP-style portfolio website built with React, TypeScript, and
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/zalar2202/salar-xp-portfolio.git
+git clone https://github.com/yourusername/salar-xp-portfolio.git
 cd salar-xp-portfolio
 ```
 

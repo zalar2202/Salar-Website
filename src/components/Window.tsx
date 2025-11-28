@@ -23,7 +23,15 @@ const Window: React.FC<WindowProps> = ({
     onFocus,
     initialPosition = { x: 100, y: 100 }
 }) => {
-    const [position, setPosition] = useState(initialPosition);
+    const [position, setPosition] = useState(() => {
+        if (window.innerWidth < 768) {
+            return {
+                x: Math.max(0, (window.innerWidth - 300) / 2), // Approx center for mobile
+                y: 50
+            };
+        }
+        return initialPosition;
+    });
     const [isDragging, setIsDragging] = useState(false);
     const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
     const windowRef = useRef<HTMLDivElement>(null);
@@ -76,8 +84,8 @@ const Window: React.FC<WindowProps> = ({
                 position: 'absolute',
                 left: position.x,
                 top: position.y,
-                width: '600px',
-                height: '400px',
+                width: 'min(600px, 95vw)',
+                height: 'min(400px, 80vh)',
                 backgroundColor: '#ECE9D8',
                 border: '1px solid #0055EA',
                 borderTopLeftRadius: '8px',
