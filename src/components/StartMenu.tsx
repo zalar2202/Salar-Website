@@ -3,13 +3,15 @@ import ieIcon from '../assets/xp_ie_icon_1764251910162.png';
 import notepadIcon from '../assets/xp_notepad_icon_1764251925686.png';
 import folderIcon from '../assets/xp_folder_icon_1764251985048.png';
 import myComputerIcon from '../assets/xp_my_computer_icon_1764252098649.png';
+import emailIcon from '../assets/xp_email_icon.png';
 
 interface StartMenuProps {
     isOpen: boolean;
     onClose: () => void;
+    onItemClick: (item: string) => void;
 }
 
-const StartMenu: React.FC<StartMenuProps> = ({ isOpen }) => {
+const StartMenu: React.FC<StartMenuProps> = ({ isOpen, onItemClick }) => {
     if (!isOpen) return null;
 
     return (
@@ -72,9 +74,9 @@ const StartMenu: React.FC<StartMenuProps> = ({ isOpen }) => {
                     gap: '5px'
                 }}>
                     {[
-                        { name: 'Internet Explorer', icon: ieIcon, desc: 'Browse the Internet' },
-                        { name: 'E-mail', icon: null, desc: 'E-mail program' },
-                        { name: 'Notepad', icon: notepadIcon, desc: 'Text Editor' },
+                        { name: 'Internet Explorer', icon: ieIcon, desc: 'Browse the Internet', action: 'internet-explorer' },
+                        { name: 'E-mail', icon: emailIcon, desc: 'E-mail program', action: 'email' },
+                        { name: 'Notepad', icon: notepadIcon, desc: 'Text Editor', action: 'notepad' },
                     ].map((app, i) => (
                         <div key={i} style={{
                             padding: '5px',
@@ -83,6 +85,7 @@ const StartMenu: React.FC<StartMenuProps> = ({ isOpen }) => {
                             cursor: 'pointer',
                             color: '#333'
                         }}
+                            onClick={() => onItemClick(app.action)}
                             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#316AC5'}
                             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                         >
@@ -119,14 +122,14 @@ const StartMenu: React.FC<StartMenuProps> = ({ isOpen }) => {
                     gap: '5px'
                 }}>
                     {[
-                        { name: 'My Documents', icon: folderIcon, bold: true },
-                        { name: 'My Computer', icon: myComputerIcon, bold: true },
-                        { name: 'My Network Places', icon: null, bold: false },
-                        { name: 'Control Panel', icon: null, bold: false },
-                        { name: 'Printers and Faxes', icon: null, bold: false },
-                        { name: 'Help and Support', icon: null, bold: false },
-                        { name: 'Search', icon: null, bold: false },
-                        { name: 'Run...', icon: null, bold: false }
+                        { name: 'My Documents', icon: folderIcon, bold: true, action: 'my-documents' },
+                        { name: 'My Computer', icon: myComputerIcon, bold: true, action: 'my-computer' },
+                        { name: 'My Network Places', icon: null, bold: false, action: null },
+                        { name: 'Control Panel', icon: null, bold: false, action: null },
+                        { name: 'Printers and Faxes', icon: null, bold: false, action: null },
+                        { name: 'Help and Support', icon: null, bold: false, action: null },
+                        { name: 'Search', icon: null, bold: false, action: null },
+                        { name: 'Run...', icon: null, bold: false, action: null }
                     ].map((item, i) => (
                         <div key={i} style={{
                             padding: '5px',
@@ -137,6 +140,7 @@ const StartMenu: React.FC<StartMenuProps> = ({ isOpen }) => {
                             fontSize: '11px',
                             fontWeight: item.bold ? 'bold' : 'normal'
                         }}
+                            onClick={() => item.action && onItemClick(item.action)}
                             onMouseEnter={(e) => {
                                 e.currentTarget.style.backgroundColor = '#316AC5';
                                 e.currentTarget.style.color = 'white';

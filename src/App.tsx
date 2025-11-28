@@ -6,6 +6,7 @@ import DesktopIcon from './components/DesktopIcon';
 import Window from './components/Window';
 import Notepad from './components/apps/Notepad';
 import InternetExplorer from './components/apps/InternetExplorer';
+import Email from './components/apps/Email';
 
 // Assets
 import myComputerIcon from './assets/xp_my_computer_authentic.png';
@@ -13,6 +14,7 @@ import ieIcon from './assets/xp_ie_icon_1764251910162.png';
 import notepadIcon from './assets/xp_notepad_icon_1764251925686.png';
 import folderIcon from './assets/xp_folder_icon_1764251985048.png';
 import recycleBinEmptyIcon from './assets/xp_recycle_bin_empty.png';
+import emailIcon from './assets/xp_email_icon.png';
 // Recycle bin - using empty icon by default
 const recycleBinIcon = recycleBinEmptyIcon;
 
@@ -99,6 +101,15 @@ function App() {
       isMinimized: false,
       zIndex: 0,
       icon: notepadIcon
+    },
+    {
+      id: 5,
+      title: 'Outlook Express',
+      content: <Email />,
+      isOpen: false,
+      isMinimized: false,
+      zIndex: 0,
+      icon: emailIcon
     }
   ]);
 
@@ -159,6 +170,28 @@ function App() {
       handleFocusWindow(id);
     } else {
       handleMinimizeWindow(id);
+    }
+  }
+
+  const handleStartMenuItemClick = (action: string) => {
+    switch (action) {
+      case 'internet-explorer':
+        handleOpenWindow(3);
+        break;
+      case 'email':
+        handleOpenWindow(5);
+        break;
+      case 'notepad':
+        handleOpenWindow(4);
+        break;
+      case 'my-computer':
+        handleOpenWindow(1);
+        break;
+      case 'my-documents':
+        handleOpenWindow(2);
+        break;
+      default:
+        console.log('Unknown action:', action);
     }
   };
 
@@ -227,6 +260,7 @@ function App() {
         openWindows={windows.filter(w => w.isOpen).map(w => ({ id: w.id, title: w.title, minimized: w.isMinimized, icon: w.icon }))}
         activeWindowId={activeWindowId}
         onWindowClick={handleTaskbarClick}
+        onStartMenuItemClick={handleStartMenuItemClick}
       />
     </>
   );

@@ -6,9 +6,10 @@ interface TaskbarProps {
     openWindows: { id: number; title: string; minimized: boolean; icon?: string }[];
     activeWindowId: number | null;
     onWindowClick: (id: number) => void;
+    onStartMenuItemClick: (item: string) => void;
 }
 
-const Taskbar: React.FC<TaskbarProps> = ({ openWindows, activeWindowId, onWindowClick }) => {
+const Taskbar: React.FC<TaskbarProps> = ({ openWindows, activeWindowId, onWindowClick, onStartMenuItemClick }) => {
     const [isStartOpen, setIsStartOpen] = useState(false);
     const [time, setTime] = useState(new Date());
 
@@ -31,7 +32,14 @@ const Taskbar: React.FC<TaskbarProps> = ({ openWindows, activeWindowId, onWindow
             borderTop: '1px solid #3E75CF',
             userSelect: 'none'
         }}>
-            <StartMenu isOpen={isStartOpen} onClose={() => setIsStartOpen(false)} />
+            <StartMenu
+                isOpen={isStartOpen}
+                onClose={() => setIsStartOpen(false)}
+                onItemClick={(item) => {
+                    onStartMenuItemClick(item);
+                    setIsStartOpen(false);
+                }}
+            />
 
             {/* Start Button */}
             <div
