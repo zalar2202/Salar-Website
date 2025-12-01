@@ -21,6 +21,7 @@ const DesktopIcon: React.FC<DesktopIconProps> = ({
 }) => {
     const [isDragging, setIsDragging] = useState(false);
     const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+    const [lastTap, setLastTap] = useState(0);
 
     const handleMouseDown = (e: React.MouseEvent) => {
         if (e.button === 0) { // Left click only
@@ -33,6 +34,26 @@ const DesktopIcon: React.FC<DesktopIconProps> = ({
         }
     };
 
+    const handleTouchStart = (e: React.TouchEvent) => {
+        const touch = e.touches[0];
+        setIsDragging(true);
+        setDragOffset({
+            x: touch.clientX - position.x,
+            y: touch.clientY - position.y
+        });
+
+        // Handle double-tap
+        const now = Date.now();
+        const DOUBLE_TAP_DELAY = 300;
+        if (now - lastTap < DOUBLE_TAP_DELAY) {
+            onDoubleClick();
+            setLastTap(0);
+        } else {
+            setLastTap(now);
+            onClick?.(e as any);
+        }
+    };
+
     const handleMouseMove = (e: MouseEvent) => {
         if (isDragging && onPositionChange) {
             const newX = e.clientX - dragOffset.x;
@@ -41,7 +62,20 @@ const DesktopIcon: React.FC<DesktopIconProps> = ({
         }
     };
 
+    const handleTouchMove = (e: TouchEvent) => {
+        if (isDragging && onPositionChange) {
+            const touch = e.touches[0];
+            const newX = touch.clientX - dragOffset.x;
+            const newY = touch.clientY - dragOffset.y;
+            onPositionChange({ x: newX, y: newY });
+        }
+    };
+
     const handleMouseUp = () => {
+        setIsDragging(false);
+    };
+
+    const handleTouchEnd = () => {
         setIsDragging(false);
     };
 
@@ -49,28 +83,35 @@ const DesktopIcon: React.FC<DesktopIconProps> = ({
         if (isDragging) {
             window.addEventListener('mousemove', handleMouseMove);
             window.addEventListener('mouseup', handleMouseUp);
+            window.addEventListener('touchmove', handleTouchMove);
+            window.addEventListener('touchend', handleTouchEnd);
             return () => {
                 window.removeEventListener('mousemove', handleMouseMove);
                 window.removeEventListener('mouseup', handleMouseUp);
+                window.removeEventListener('touchmove', handleTouchMove);
+                window.removeEventListener('touchend', handleTouchEnd);
             };
         }
     }, [isDragging, dragOffset]);
+
+    const isMobile = window.innerWidth < 768;
 
     return (
         <div
             onDoubleClick={onDoubleClick}
             onClick={onClick}
             onMouseDown={handleMouseDown}
+            onTouchStart={handleTouchStart}
             style={{
                 position: 'absolute',
                 left: `${position.x}px`,
                 top: `${position.y}px`,
-                width: '75px',
+                width: isMobile ? '70px' : '75px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 cursor: isDragging ? 'grabbing' : 'grab',
-                padding: '5px',
+                padding: isMobile ? '3px' : '5px',
                 backgroundColor: selected ? 'rgba(11, 97, 255, 0.3)' : 'transparent',
                 border: selected ? '1px dotted rgba(255, 255, 255, 0.5)' : '1px solid transparent',
                 borderRadius: '3px',

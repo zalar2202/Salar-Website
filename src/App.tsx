@@ -195,12 +195,19 @@ function App() {
     }
   };
 
-  const [iconPositions, setIconPositions] = useState<Record<number, { x: number; y: number }>>({
-    1: { x: 20, y: 20 },
-    2: { x: 20, y: 120 },
-    3: { x: 20, y: 220 },
-    4: { x: 20, y: 320 },
-    5: { x: 20, y: 420 },
+  const [iconPositions, setIconPositions] = useState<Record<number, { x: number; y: number }>>(() => {
+    const isMobile = window.innerWidth < 768;
+    const spacing = isMobile ? 90 : 100;
+    const startX = isMobile ? 10 : 20;
+    const startY = isMobile ? 10 : 20;
+
+    return {
+      1: { x: startX, y: startY },
+      2: { x: startX, y: startY + spacing },
+      3: { x: startX, y: startY + spacing * 2 },
+      4: { x: startX, y: startY + spacing * 3 },
+      5: { x: startX, y: startY + spacing * 4 },
+    };
   });
 
   const desktopIcons = [

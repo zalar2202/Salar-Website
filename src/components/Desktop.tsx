@@ -22,13 +22,15 @@ const Desktop: React.FC<DesktopProps> = ({ children, onBackgroundClick }) => {
             {/* Windows XP Style Logo Overlay */}
             <div style={{
                 position: 'absolute',
-                bottom: '50px',
-                right: '30px',
+                bottom: window.innerWidth < 768 ? '40px' : '50px',
+                right: window.innerWidth < 768 ? '10px' : '30px',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '10px',
+                gap: window.innerWidth < 768 ? '5px' : '10px',
                 pointerEvents: 'none',
-                userSelect: 'none'
+                userSelect: 'none',
+                transform: window.innerWidth < 768 ? 'scale(0.5)' : 'scale(1)',
+                transformOrigin: 'bottom right'
             }}>
                 {/* Windows Logo */}
                 <div style={{

@@ -26,8 +26,8 @@ const Window: React.FC<WindowProps> = ({
     const [position, setPosition] = useState(() => {
         if (window.innerWidth < 768) {
             return {
-                x: Math.max(0, (window.innerWidth - 300) / 2), // Approx center for mobile
-                y: 50
+                x: 5, // Small margin from left
+                y: 20 // Closer to top
             };
         }
         return initialPosition;
@@ -49,6 +49,19 @@ const Window: React.FC<WindowProps> = ({
         }
     };
 
+    const handleTouchStart = (e: React.TouchEvent) => {
+        onFocus();
+        const touch = e.touches[0];
+        setIsDragging(true);
+        const rect = windowRef.current?.getBoundingClientRect();
+        if (rect) {
+            setDragOffset({
+                x: touch.clientX - rect.left,
+                y: touch.clientY - rect.top
+            });
+        }
+    };
+
     useEffect(() => {
         const handleMouseMove = (e: MouseEvent) => {
             if (isDragging) {
@@ -59,22 +72,43 @@ const Window: React.FC<WindowProps> = ({
             }
         };
 
+        const handleTouchMove = (e: TouchEvent) => {
+            if (isDragging) {
+                const touch = e.touches[0];
+                setPosition({
+                    x: touch.clientX - dragOffset.x,
+                    y: touch.clientY - dragOffset.y
+                });
+                e.preventDefault(); // Prevent scrolling while dragging window
+            }
+        };
+
         const handleMouseUp = () => {
+            setIsDragging(false);
+        };
+
+        const handleTouchEnd = () => {
             setIsDragging(false);
         };
 
         if (isDragging) {
             document.addEventListener('mousemove', handleMouseMove);
             document.addEventListener('mouseup', handleMouseUp);
+            document.addEventListener('touchmove', handleTouchMove, { passive: false });
+            document.addEventListener('touchend', handleTouchEnd);
         }
 
         return () => {
             document.removeEventListener('mousemove', handleMouseMove);
             document.removeEventListener('mouseup', handleMouseUp);
+            document.removeEventListener('touchmove', handleTouchMove);
+            document.removeEventListener('touchend', handleTouchEnd);
         };
     }, [isDragging, dragOffset]);
 
     if (isMinimized) return null;
+
+    const isMobile = window.innerWidth < 768;
 
     return (
         <div
@@ -84,8 +118,8 @@ const Window: React.FC<WindowProps> = ({
                 position: 'absolute',
                 left: position.x,
                 top: position.y,
-                width: 'min(600px, 95vw)',
-                height: 'min(400px, 80vh)',
+                width: isMobile ? 'calc(100vw - 20px)' : 'min(600px, 95vw)',
+                height: isMobile ? 'calc(100vh - 80px)' : 'min(400px, 80vh)',
                 backgroundColor: '#ECE9D8',
                 border: '1px solid #0055EA',
                 borderTopLeftRadius: '8px',
@@ -100,6 +134,7 @@ const Window: React.FC<WindowProps> = ({
             {/* Title Bar */}
             <div
                 onMouseDown={handleMouseDown}
+                onTouchStart={handleTouchStart}
                 style={{
                     height: '30px',
                     background: isActive

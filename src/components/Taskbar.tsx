@@ -126,11 +126,12 @@ const Taskbar: React.FC<TaskbarProps> = ({ openWindows, activeWindowId, onWindow
 
             {/* System Tray */}
             <div style={{
-                width: '100px',
+                width: '120px',
                 height: '100%',
                 backgroundColor: '#0B77E9',
                 borderLeft: '1px solid #1042AF',
                 display: 'flex',
+                flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: 'white',
@@ -139,7 +140,8 @@ const Taskbar: React.FC<TaskbarProps> = ({ openWindows, activeWindowId, onWindow
                 boxShadow: 'inset 1px 1px 2px rgba(0,0,0,0.2)',
                 flexShrink: 0
             }}>
-                {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                <div>{time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                <div style={{ fontSize: '10px' }}>{time.toLocaleDateString([], { month: '2-digit', day: '2-digit', year: 'numeric' })}</div>
             </div>
         </div>
     );
