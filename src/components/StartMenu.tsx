@@ -7,6 +7,10 @@ import emailIcon from '../assets/xp_email_icon.png';
 import userIcon from '../assets/xp_user_salar.png';
 import logOffIcon from '../assets/xp_icon_logoff.png';
 import turnOffIcon from '../assets/xp_icon_turnoff.png';
+import networkIcon from '../assets/xp_network_icon.png';
+import controlPanelIcon from '../assets/xp_control_panel_icon.png';
+import printerIcon from '../assets/xp_printer_icon.png';
+import helpIcon from '../assets/xp_help_icon.png';
 
 interface StartMenuProps {
     isOpen: boolean;
@@ -128,12 +132,12 @@ const StartMenu: React.FC<StartMenuProps> = ({ isOpen, onItemClick }) => {
                     {[
                         { name: 'My Documents', icon: folderIcon, bold: true, action: 'my-documents' },
                         { name: 'My Computer', icon: myComputerIcon, bold: true, action: 'my-computer' },
-                        { name: 'My Network Places', icon: null, bold: false, action: null },
-                        { name: 'Control Panel', icon: null, bold: false, action: null },
-                        { name: 'Printers and Faxes', icon: null, bold: false, action: null },
-                        { name: 'Help and Support', icon: null, bold: false, action: null },
-                        { name: 'Search', icon: null, bold: false, action: null },
-                        { name: 'Run...', icon: null, bold: false, action: null }
+                        { name: 'My Network Places', icon: networkIcon, bold: false, action: null },
+                        { name: 'Control Panel', icon: controlPanelIcon, bold: false, action: null },
+                        { name: 'Printers and Faxes', icon: printerIcon, bold: false, action: null },
+                        { name: 'Help and Support', icon: helpIcon, bold: false, action: null },
+                        { name: 'Search', icon: folderIcon, bold: false, action: null },
+                        { name: 'Run...', icon: folderIcon, bold: false, action: null }
                     ].map((item, i) => (
                         <div key={i} style={{
                             padding: '5px',
