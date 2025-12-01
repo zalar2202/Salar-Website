@@ -1,8 +1,10 @@
-import React from 'react';
-import ieIcon from '../assets/xp_ie_icon_1764251910162.png';
-import notepadIcon from '../assets/xp_notepad_icon_1764251925686.png';
-import folderIcon from '../assets/xp_folder_icon_1764251985048.png';
-import myComputerIcon from '../assets/xp_my_computer_icon_1764252098649.png';
+import React, { useState } from 'react';
+import ieIcon from '../assets/xp_ie_icon.png';
+import notepadIcon from '../assets/xp_notepad_icon.png';
+import calculatorIcon from '../assets/xp_calculator_icon.png';
+import paintIcon from '../assets/xp_paint_icon.png';
+import folderIcon from '../assets/xp_folder_icon.png';
+import myComputerIcon from '../assets/xp_my_computer_icon.png';
 import emailIcon from '../assets/xp_email_icon.png';
 import userIcon from '../assets/xp_user_salar.png';
 import logOffIcon from '../assets/xp_icon_logoff.png';
@@ -11,6 +13,10 @@ import networkIcon from '../assets/xp_network_icon.png';
 import controlPanelIcon from '../assets/xp_control_panel_icon.png';
 import printerIcon from '../assets/xp_printer_icon.png';
 import helpIcon from '../assets/xp_help_icon.png';
+import searchIcon from '../assets/xp_search_icon.png';
+import runIcon from '../assets/xp_run_icon.png';
+import minesweeperIcon from '../assets/xp_minesweeper_icon.png';
+import solitaireIcon from '../assets/xp_solitaire_icon.png';
 
 interface StartMenuProps {
     isOpen: boolean;
@@ -19,7 +25,14 @@ interface StartMenuProps {
 }
 
 const StartMenu: React.FC<StartMenuProps> = ({ isOpen, onItemClick }) => {
+    const [isAllProgramsOpen, setIsAllProgramsOpen] = useState(false);
+    const [hoveredFolder, setHoveredFolder] = useState<string | null>(null);
+
     if (!isOpen) return null;
+
+    const handleAllProgramsClick = () => {
+        setIsAllProgramsOpen(!isAllProgramsOpen);
+    };
 
     return (
         <div style={{
@@ -37,6 +50,209 @@ const StartMenu: React.FC<StartMenuProps> = ({ isOpen, onItemClick }) => {
             zIndex: 10000,
             fontFamily: 'Tahoma, sans-serif'
         }}>
+            {/* All Programs Submenu - positioned over the RIGHT column */}
+            {isAllProgramsOpen && (
+                <div style={{
+                    position: 'absolute',
+                    top: '60px', // Below header
+                    bottom: '40px', // Above footer
+                    left: '50%', // Start at middle (covering right column)
+                    width: '50%', // Cover right column
+                    backgroundColor: '#fff',
+                    borderLeft: '1px solid #3A6EA5',
+                    zIndex: 9999,
+                    fontFamily: 'Tahoma, sans-serif',
+                    padding: '5px',
+                    display: 'flex',
+                    flexDirection: 'column'
+                }}>
+                    <div style={{
+                        padding: '5px',
+                        fontWeight: 'bold',
+                        fontSize: '11px',
+                        color: '#0B53C0',
+                        borderBottom: '1px solid #ccc',
+                        marginBottom: '5px'
+                    }}>
+                        Programs
+                    </div>
+
+                    {[
+                        { name: 'Accessories', icon: folderIcon, isFolder: true, action: null },
+                        { name: 'Games', icon: folderIcon, isFolder: true, action: null },
+                        { name: 'Internet Explorer', icon: ieIcon, isFolder: false, action: 'internet-explorer' },
+                        { name: 'Outlook Express', icon: emailIcon, isFolder: false, action: 'email' },
+                    ].map((program, i) => (
+                        <div
+                            key={i}
+                            style={{
+                                position: 'relative'
+                            }}
+                            onMouseEnter={() => program.isFolder && setHoveredFolder(program.name)}
+                            onMouseLeave={() => program.isFolder && setHoveredFolder(null)}
+                        >
+                            <div style={{
+                                padding: '5px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                cursor: 'pointer',
+                                fontSize: '11px',
+                                color: '#000',
+                                backgroundColor: hoveredFolder === program.name ? '#316AC5' : 'transparent'
+                            }}
+                                onClick={() => {
+                                    if (program.action) {
+                                        onItemClick(program.action);
+                                        setIsAllProgramsOpen(false);
+                                    }
+                                }}
+                                onMouseEnter={(e) => {
+                                    if (!program.isFolder) {
+                                        e.currentTarget.style.backgroundColor = '#316AC5';
+                                        e.currentTarget.style.color = 'white';
+                                    }
+                                }}
+                                onMouseLeave={(e) => {
+                                    if (!program.isFolder && hoveredFolder !== program.name) {
+                                        e.currentTarget.style.backgroundColor = 'transparent';
+                                        e.currentTarget.style.color = '#000';
+                                    }
+                                }}
+                            >
+                                <div style={{
+                                    width: '20px',
+                                    height: '20px',
+                                    marginRight: '8px',
+                                    backgroundImage: `url(${program.icon})`,
+                                    backgroundSize: 'contain',
+                                    backgroundRepeat: 'no-repeat',
+                                    backgroundPosition: 'center'
+                                }} />
+                                <span style={{ color: hoveredFolder === program.name ? 'white' : '#000' }}>
+                                    {program.name} {program.isFolder && '▶'}
+                                </span>
+                            </div>
+
+                            {/* Games submenu */}
+                            {program.name === 'Games' && hoveredFolder === 'Games' && (
+                                <div style={{
+                                    position: 'absolute',
+                                    left: '100%',
+                                    top: 0,
+                                    width: 'min(200px, 40vw)',
+                                    backgroundColor: '#fff',
+                                    border: '1px solid #0B53C0',
+                                    borderRadius: '3px',
+                                    boxShadow: '2px 2px 5px rgba(0,0,0,0.3)',
+                                    padding: '5px',
+                                    zIndex: 10000
+                                }}>
+                                    {[
+                                        { name: 'Minesweeper', icon: minesweeperIcon, action: 'minesweeper' },
+                                        { name: 'Solitaire', icon: solitaireIcon, action: null },
+                                    ].map((game, gi) => (
+                                        <div key={gi} style={{
+                                            padding: '5px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            cursor: 'pointer',
+                                            fontSize: '11px',
+                                            color: '#000'
+                                        }}
+                                            onClick={() => {
+                                                if (game.action) {
+                                                    onItemClick(game.action);
+                                                    setIsAllProgramsOpen(false);
+                                                    setHoveredFolder(null);
+                                                }
+                                            }}
+                                            onMouseEnter={(e) => {
+                                                e.currentTarget.style.backgroundColor = '#316AC5';
+                                                e.currentTarget.style.color = 'white';
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                e.currentTarget.style.backgroundColor = 'transparent';
+                                                e.currentTarget.style.color = '#000';
+                                            }}
+                                        >
+                                            <div style={{
+                                                width: '20px',
+                                                height: '20px',
+                                                marginRight: '8px',
+                                                backgroundImage: `url(${game.icon})`,
+                                                backgroundSize: 'contain',
+                                                backgroundRepeat: 'no-repeat',
+                                                backgroundPosition: 'center'
+                                            }} />
+                                            <span>{game.name}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
+                            {/* Accessories submenu */}
+                            {program.name === 'Accessories' && hoveredFolder === 'Accessories' && (
+                                <div style={{
+                                    position: 'absolute',
+                                    left: '100%',
+                                    top: 0,
+                                    width: 'min(200px, 40vw)',
+                                    backgroundColor: '#fff',
+                                    border: '1px solid #0B53C0',
+                                    borderRadius: '3px',
+                                    boxShadow: '2px 2px 5px rgba(0,0,0,0.3)',
+                                    padding: '5px',
+                                    zIndex: 10000
+                                }}>
+                                    {[
+                                        { name: 'Notepad', icon: notepadIcon, action: 'notepad' },
+                                        { name: 'Paint', icon: paintIcon, action: 'paint' },
+                                        { name: 'Calculator', icon: calculatorIcon, action: 'calculator' },
+                                    ].map((app, ai) => (
+                                        <div key={ai} style={{
+                                            padding: '5px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            cursor: 'pointer',
+                                            fontSize: '11px',
+                                            color: '#000'
+                                        }}
+                                            onClick={() => {
+                                                if (app.action) {
+                                                    onItemClick(app.action);
+                                                    setIsAllProgramsOpen(false);
+                                                    setHoveredFolder(null);
+                                                }
+                                            }}
+                                            onMouseEnter={(e) => {
+                                                e.currentTarget.style.backgroundColor = '#316AC5';
+                                                e.currentTarget.style.color = 'white';
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                e.currentTarget.style.backgroundColor = 'transparent';
+                                                e.currentTarget.style.color = '#000';
+                                            }}
+                                        >
+                                            <div style={{
+                                                width: '20px',
+                                                height: '20px',
+                                                marginRight: '8px',
+                                                backgroundImage: `url(${app.icon})`,
+                                                backgroundSize: 'contain',
+                                                backgroundRepeat: 'no-repeat',
+                                                backgroundPosition: 'center'
+                                            }} />
+                                            <span>{app.name}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {/* Main Start Menu Body */}
             {/* Header */}
             <div style={{
                 height: '60px',
@@ -84,7 +300,7 @@ const StartMenu: React.FC<StartMenuProps> = ({ isOpen, onItemClick }) => {
                     {[
                         { name: 'Internet Explorer', icon: ieIcon, desc: 'Browse the Internet', action: 'internet-explorer' },
                         { name: 'E-mail', icon: emailIcon, desc: 'E-mail program', action: 'email' },
-                        { name: 'Notepad', icon: notepadIcon, desc: 'Text Editor', action: 'notepad' },
+                        { name: 'Minesweeper', icon: minesweeperIcon, desc: 'Play Minesweeper', action: 'minesweeper' },
                     ].map((app, i) => (
                         <div key={i} style={{
                             padding: '5px',
@@ -115,7 +331,24 @@ const StartMenu: React.FC<StartMenuProps> = ({ isOpen, onItemClick }) => {
                     ))}
 
                     <div style={{ marginTop: 'auto', borderTop: '1px solid #ccc', paddingTop: '10px', textAlign: 'center' }}>
-                        <div style={{ padding: '5px', fontWeight: 'bold' }}>All Programs</div>
+                        <div
+                            style={{
+                                padding: '5px',
+                                fontWeight: 'bold',
+                                cursor: 'pointer',
+                                backgroundColor: isAllProgramsOpen ? '#316AC5' : 'transparent',
+                                color: isAllProgramsOpen ? 'white' : '#000'
+                            }}
+                            onClick={handleAllProgramsClick}
+                            onMouseEnter={(e) => {
+                                if (!isAllProgramsOpen) e.currentTarget.style.backgroundColor = '#e8f0ff';
+                            }}
+                            onMouseLeave={(e) => {
+                                if (!isAllProgramsOpen) e.currentTarget.style.backgroundColor = 'transparent';
+                            }}
+                        >
+                            All Programs ▶
+                        </div>
                     </div>
                 </div>
 
@@ -136,8 +369,8 @@ const StartMenu: React.FC<StartMenuProps> = ({ isOpen, onItemClick }) => {
                         { name: 'Control Panel', icon: controlPanelIcon, bold: false, action: null },
                         { name: 'Printers and Faxes', icon: printerIcon, bold: false, action: null },
                         { name: 'Help and Support', icon: helpIcon, bold: false, action: null },
-                        { name: 'Search', icon: folderIcon, bold: false, action: null },
-                        { name: 'Run...', icon: folderIcon, bold: false, action: null }
+                        { name: 'Search', icon: searchIcon, bold: false, action: null },
+                        { name: 'Run...', icon: runIcon, bold: false, action: null }
                     ].map((item, i) => (
                         <div key={i} style={{
                             padding: '5px',

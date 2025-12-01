@@ -7,10 +7,11 @@ interface TaskbarProps {
     activeWindowId: number | null;
     onWindowClick: (id: number) => void;
     onStartMenuItemClick: (item: string) => void;
+    isStartOpen: boolean;
+    setIsStartOpen: (isOpen: boolean) => void;
 }
 
-const Taskbar: React.FC<TaskbarProps> = ({ openWindows, activeWindowId, onWindowClick, onStartMenuItemClick }) => {
-    const [isStartOpen, setIsStartOpen] = useState(false);
+const Taskbar: React.FC<TaskbarProps> = ({ openWindows, activeWindowId, onWindowClick, onStartMenuItemClick, isStartOpen, setIsStartOpen }) => {
     const [time, setTime] = useState(new Date());
 
     useEffect(() => {

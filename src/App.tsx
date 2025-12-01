@@ -7,14 +7,18 @@ import Window from './components/Window';
 import Notepad from './components/apps/Notepad';
 import InternetExplorer from './components/apps/InternetExplorer';
 import Email from './components/apps/Email';
+import Minesweeper from './components/apps/Minesweeper';
+import Calculator from './components/apps/Calculator';
 
 // Assets
-import myComputerIcon from './assets/xp_my_computer_authentic.png';
-import ieIcon from './assets/xp_ie_icon_1764251910162.png';
-import notepadIcon from './assets/xp_notepad_icon_1764251925686.png';
-import folderIcon from './assets/xp_folder_icon_1764251985048.png';
+import myComputerIcon from './assets/xp_my_computer_icon.png';
+import ieIcon from './assets/xp_ie_icon.png';
+import notepadIcon from './assets/xp_notepad_icon.png';
+import folderIcon from './assets/xp_folder_icon.png';
 import recycleBinEmptyIcon from './assets/xp_recycle_bin_empty.png';
 import emailIcon from './assets/xp_email_icon.png';
+import minesweeperIcon from './assets/xp_minesweeper_icon.png';
+import calculatorIcon from './assets/xp_calculator_icon.png';
 // Recycle bin - using empty icon by default
 const recycleBinIcon = recycleBinEmptyIcon;
 
@@ -110,12 +114,31 @@ function App() {
       isMinimized: false,
       zIndex: 0,
       icon: emailIcon
+    },
+    {
+      id: 6,
+      title: 'Minesweeper',
+      content: <Minesweeper />,
+      isOpen: false,
+      isMinimized: false,
+      zIndex: 0,
+      icon: minesweeperIcon
+    },
+    {
+      id: 7,
+      title: 'Calculator',
+      content: <Calculator />,
+      isOpen: false,
+      isMinimized: false,
+      zIndex: 0,
+      icon: calculatorIcon
     }
   ]);
 
   const [activeWindowId, setActiveWindowId] = useState<number | null>(1);
   const [nextZIndex, setNextZIndex] = useState(2);
   const [selectedIconId, setSelectedIconId] = useState<number | null>(null);
+  const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
 
   const handleOpenWindow = (id: number) => {
     setWindows(prev => prev.map(w => {
@@ -181,15 +204,23 @@ function App() {
       case 'email':
         handleOpenWindow(5);
         break;
-      case 'notepad':
-        handleOpenWindow(4);
-        break;
       case 'my-computer':
         handleOpenWindow(1);
         break;
       case 'my-documents':
         handleOpenWindow(2);
         break;
+      case 'minesweeper':
+        handleOpenWindow(6);
+        break;
+      case 'calculator':
+        handleOpenWindow(7);
+        break;
+      case 'paint':
+      case 'notepad':
+        handleOpenWindow(4);
+        break;
+
       default:
         console.log('Unknown action:', action);
     }
@@ -227,7 +258,7 @@ function App() {
 
   return (
     <>
-      <Desktop onBackgroundClick={() => setSelectedIconId(null)}>
+      <Desktop onBackgroundClick={() => { setSelectedIconId(null); setIsStartMenuOpen(false); }}>
         {desktopIcons.map(icon => (
           <DesktopIcon
             key={icon.id}
@@ -268,6 +299,8 @@ function App() {
         activeWindowId={activeWindowId}
         onWindowClick={handleTaskbarClick}
         onStartMenuItemClick={handleStartMenuItemClick}
+        isStartOpen={isStartMenuOpen}
+        setIsStartOpen={setIsStartMenuOpen}
       />
     </>
   );
