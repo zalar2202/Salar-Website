@@ -9,6 +9,9 @@ import InternetExplorer from './components/apps/InternetExplorer';
 import Email from './components/apps/Email';
 import Minesweeper from './components/apps/Minesweeper';
 import Calculator from './components/apps/Calculator';
+import MyDocuments from './components/apps/MyDocuments';
+import MyComputer from './components/apps/MyComputer';
+import RecycleBin from './components/apps/RecycleBin';
 
 // Assets
 import myComputerIcon from './assets/xp_my_computer_icon.png';
@@ -37,28 +40,7 @@ function App() {
     {
       id: 1,
       title: 'My Computer',
-      content: (
-        <div style={{ padding: '20px', fontFamily: 'Tahoma, sans-serif' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
-            <img src={myComputerIcon} style={{ width: '32px', height: '32px' }} />
-            <h1 style={{ fontSize: '24px', fontWeight: 'normal', margin: 0 }}>Salar XP</h1>
-          </div>
-          <p style={{ lineHeight: '1.6', marginBottom: '15px' }}>
-            I'm Salar, a multidisciplinary developer focused on web engineering, automation, and infrastructure.
-            I build reliable systems, deploy scalable applications, and solve complex technical problems across
-            the full stack—from WordPress and Next.js to Docker, VPS orchestration, and AI-powered workflows.
-            My work is fast, practical, and execution-driven, with a clear focus on stability, performance,
-            and real-world usability.
-          </p>
-          <hr style={{ margin: '15px 0', border: '0', borderTop: '1px solid #ccc' }} />
-          <p>Feel free to explore the desktop, open applications, and drag windows around.</p>
-          <ul style={{ marginTop: '10px', paddingLeft: '20px' }}>
-            <li>Double-click icons to open programs.</li>
-            <li>Use the Start Menu to access more options.</li>
-            <li>Try the Notepad application!</li>
-          </ul>
-        </div>
-      ),
+      content: <MyComputer />,
       isOpen: true,
       isMinimized: false,
       zIndex: 1,
@@ -67,22 +49,7 @@ function App() {
     {
       id: 2,
       title: 'My Documents',
-      content: (
-        <div style={{ padding: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-          <div style={{ textAlign: 'center', width: '60px' }}>
-            <img src={folderIcon} style={{ width: '32px', height: '32px' }} />
-            <div style={{ fontSize: '11px' }}>Resume</div>
-          </div>
-          <div style={{ textAlign: 'center', width: '60px' }}>
-            <img src={folderIcon} style={{ width: '32px', height: '32px' }} />
-            <div style={{ fontSize: '11px' }}>Projects</div>
-          </div>
-          <div style={{ textAlign: 'center', width: '60px' }}>
-            <img src={folderIcon} style={{ width: '32px', height: '32px' }} />
-            <div style={{ fontSize: '11px' }}>Photos</div>
-          </div>
-        </div>
-      ),
+      content: <MyDocuments />,
       isOpen: false,
       isMinimized: false,
       zIndex: 0,
@@ -132,6 +99,15 @@ function App() {
       isMinimized: false,
       zIndex: 0,
       icon: calculatorIcon
+    },
+    {
+      id: 8,
+      title: 'Recycle Bin',
+      content: <RecycleBin />,
+      isOpen: false,
+      isMinimized: false,
+      zIndex: 0,
+      icon: recycleBinIcon
     }
   ]);
 
@@ -271,6 +247,7 @@ function App() {
             onDoubleClick={() => {
               // Map icon IDs to window IDs
               if (icon.id <= 4) handleOpenWindow(icon.id);
+              if (icon.id === 5) handleOpenWindow(8); // Recycle Bin
             }}
           />
         ))}

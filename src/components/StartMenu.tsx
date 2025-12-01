@@ -301,6 +301,7 @@ const StartMenu: React.FC<StartMenuProps> = ({ isOpen, onItemClick }) => {
                         { name: 'Internet Explorer', icon: ieIcon, desc: 'Browse the Internet', action: 'internet-explorer' },
                         { name: 'E-mail', icon: emailIcon, desc: 'E-mail program', action: 'email' },
                         { name: 'Minesweeper', icon: minesweeperIcon, desc: 'Play Minesweeper', action: 'minesweeper' },
+                        { name: 'Calculator', icon: calculatorIcon, desc: 'Perform calculations', action: 'calculator' },
                     ].map((app, i) => (
                         <div key={i} style={{
                             padding: '5px',

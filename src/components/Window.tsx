@@ -34,11 +34,13 @@ const Window: React.FC<WindowProps> = ({
     });
     const [isDragging, setIsDragging] = useState(false);
     const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+    const [isMaximized, setIsMaximized] = useState(false);
     const windowRef = useRef<HTMLDivElement>(null);
 
     const handleMouseDown = (e: React.MouseEvent) => {
         onFocus();
         if (e.button !== 0) return; // Only left click
+        if (isMaximized) return;
         setIsDragging(true);
         const rect = windowRef.current?.getBoundingClientRect();
         if (rect) {
@@ -51,6 +53,7 @@ const Window: React.FC<WindowProps> = ({
 
     const handleTouchStart = (e: React.TouchEvent) => {
         onFocus();
+        if (isMaximized) return;
         const touch = e.touches[0];
         setIsDragging(true);
         const rect = windowRef.current?.getBoundingClientRect();
@@ -116,14 +119,14 @@ const Window: React.FC<WindowProps> = ({
             onMouseDown={() => onFocus()}
             style={{
                 position: 'absolute',
-                left: position.x,
-                top: position.y,
-                width: isMobile ? 'calc(100vw - 20px)' : 'min(600px, 95vw)',
-                height: isMobile ? 'calc(100vh - 80px)' : 'min(400px, 80vh)',
-                backgroundColor: '#ECE9D8',
-                border: '1px solid #0055EA',
-                borderTopLeftRadius: '8px',
-                borderTopRightRadius: '8px',
+                left: isMaximized ? 0 : position.x,
+                top: isMaximized ? 0 : position.y,
+                width: isMaximized ? '100vw' : (isMobile ? 'calc(100vw - 20px)' : 'min(600px, 95vw)'),
+                height: isMaximized ? 'calc(100vh - 30px)' : (isMobile ? 'calc(100vh - 80px)' : 'min(400px, 80vh)'),
+                backgroundColor: '#0055EA',
+                border: isMaximized ? 'none' : '1px solid #00138C',
+                borderTopLeftRadius: isMaximized ? 0 : '8px',
+                borderTopRightRadius: isMaximized ? 0 : '8px',
                 boxShadow: isActive ? '2px 2px 10px rgba(0,0,0,0.5)' : '1px 1px 5px rgba(0,0,0,0.3)',
                 display: 'flex',
                 flexDirection: 'column',
@@ -157,49 +160,14 @@ const Window: React.FC<WindowProps> = ({
                     {title}
                 </div>
 
-                <div style={{ display: 'flex', gap: '2px' }}>
+                <div style={{ display: 'flex', gap: '2px', paddingRight: '2px' }}>
                     <button
                         onClick={(e) => { e.stopPropagation(); onMinimize(); }}
                         style={{
                             width: '21px',
                             height: '21px',
-                            backgroundColor: '#D6DFF7',
-                            border: '1px solid white',
-                            borderRadius: '3px',
-                            padding: 0,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: '10px',
-                            fontWeight: 'bold',
-                            color: 'black',
-                            cursor: 'pointer'
-                        }}
-                    >_</button>
-                    <button
-                        style={{
-                            width: '21px',
-                            height: '21px',
-                            backgroundColor: '#D6DFF7',
-                            border: '1px solid white',
-                            borderRadius: '3px',
-                            padding: 0,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: '10px',
-                            fontWeight: 'bold',
-                            color: 'black',
-                            cursor: 'pointer'
-                        }}
-                    >□</button>
-                    <button
-                        onClick={(e) => { e.stopPropagation(); onClose(); }}
-                        style={{
-                            width: '21px',
-                            height: '21px',
-                            backgroundColor: '#E04F38',
-                            border: '1px solid white',
+                            background: 'linear-gradient(180deg, #8EAEE6 0%, #6C93E2 50%, #466CC5 50%, #6C93E2 100%)',
+                            border: '1px solid #FFF',
                             borderRadius: '3px',
                             padding: 0,
                             display: 'flex',
@@ -208,22 +176,74 @@ const Window: React.FC<WindowProps> = ({
                             fontSize: '10px',
                             fontWeight: 'bold',
                             color: 'white',
-                            cursor: 'pointer'
+                            cursor: 'pointer',
+                            boxShadow: 'inset 1px 1px 0px rgba(255,255,255,0.3)',
+                            textShadow: '1px 1px 1px rgba(0,0,0,0.5)'
+                        }}
+                    >_</button>
+                    <button
+                        onClick={(e) => { e.stopPropagation(); setIsMaximized(!isMaximized); }}
+                        style={{
+                            width: '21px',
+                            height: '21px',
+                            background: 'linear-gradient(180deg, #8EAEE6 0%, #6C93E2 50%, #466CC5 50%, #6C93E2 100%)',
+                            border: '1px solid #FFF',
+                            borderRadius: '3px',
+                            padding: 0,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '10px',
+                            fontWeight: 'bold',
+                            color: 'white',
+                            cursor: 'pointer',
+                            boxShadow: 'inset 1px 1px 0px rgba(255,255,255,0.3)',
+                            textShadow: '1px 1px 1px rgba(0,0,0,0.5)'
+                        }}
+                    >{isMaximized ? '❐' : '□'}</button>
+                    <button
+                        onClick={(e) => { e.stopPropagation(); onClose(); }}
+                        style={{
+                            width: '21px',
+                            height: '21px',
+                            background: 'linear-gradient(180deg, #E67E73 0%, #E35043 50%, #D12F19 50%, #E35043 100%)',
+                            border: '1px solid #FFF',
+                            borderRadius: '3px',
+                            padding: 0,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '10px',
+                            fontWeight: 'bold',
+                            color: 'white',
+                            cursor: 'pointer',
+                            boxShadow: 'inset 1px 1px 0px rgba(255,255,255,0.3)',
+                            textShadow: '1px 1px 1px rgba(0,0,0,0.5)'
                         }}
                     >X</button>
                 </div>
             </div>
 
             {/* Content Area */}
+            {/* Content Area Wrapper (Beige) */}
             <div style={{
                 flex: 1,
-                backgroundColor: 'white',
-                border: '1px solid #999',
-                marginTop: '2px',
-                overflow: 'auto',
-                position: 'relative'
+                backgroundColor: '#ECE9D8',
+                padding: '3px',
+                display: 'flex',
+                flexDirection: 'column',
+                overflow: 'hidden'
             }}>
-                {children}
+                {/* Actual Content (White) */}
+                <div style={{
+                    flex: 1,
+                    backgroundColor: 'white',
+                    border: '1px solid #828790',
+                    overflow: 'auto',
+                    position: 'relative'
+                }}>
+                    {children}
+                </div>
             </div>
         </div>
     );
