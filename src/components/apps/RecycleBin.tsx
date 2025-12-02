@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import recycleBinIcon from '../../assets/xp_recycle_bin_empty.png';
 
 const RecycleBin: React.FC = () => {
-    const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%', fontFamily: 'Tahoma, sans-serif' }}>
