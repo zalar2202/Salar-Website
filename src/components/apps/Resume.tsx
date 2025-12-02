@@ -7,9 +7,9 @@ const Resume: React.FC = () => {
 
             <section style={{ marginBottom: '20px' }}>
                 <h3 style={{ color: '#0054a6', marginBottom: '8px' }}>Full-Stack Developer & DevOps Engineer</h3>
-                <p style={{ marginBottom: '5px' }}><strong>Email:</strong> salar@example.com</p>
+                <p style={{ marginBottom: '5px' }}><strong>Email:</strong> email@salar.website</p>
                 <p style={{ marginBottom: '5px' }}><strong>Location:</strong> Available Worldwide</p>
-                <p style={{ marginBottom: '5px' }}><strong>GitHub:</strong> github.com/salar</p>
+                <p style={{ marginBottom: '5px' }}><strong>GitHub:</strong> <a href="https://github.com/zalar2202" target="_blank" rel="noopener noreferrer" style={{ color: '#0054a6', textDecoration: 'underline' }}>github.com/zalar2202</a></p>
             </section>
 
             <section style={{ marginBottom: '20px' }}>
