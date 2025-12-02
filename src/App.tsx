@@ -1,9 +1,8 @@
-import { useState } from 'react';
-import './App.css';
-import Taskbar from './components/Taskbar';
+import React, { useState } from 'react';
 import Desktop from './components/Desktop';
 import DesktopIcon from './components/DesktopIcon';
 import Window from './components/Window';
+import Taskbar from './components/Taskbar';
 import Notepad from './components/apps/Notepad';
 import InternetExplorer from './components/apps/InternetExplorer';
 import Email from './components/apps/Email';
@@ -12,6 +11,7 @@ import Calculator from './components/apps/Calculator';
 import MyDocuments from './components/apps/MyDocuments';
 import MyComputer from './components/apps/MyComputer';
 import RecycleBin from './components/apps/RecycleBin';
+import Resume from './components/apps/Resume';
 
 // Assets
 import myComputerIcon from './assets/xp_my_computer_icon.png';
@@ -108,6 +108,15 @@ function App() {
       isMinimized: false,
       zIndex: 0,
       icon: recycleBinIcon
+    },
+    {
+      id: 9,
+      title: 'My Resume',
+      content: <Resume />,
+      isOpen: false,
+      isMinimized: false,
+      zIndex: 0,
+      icon: notepadIcon // Using notepad icon for text file look
     }
   ]);
 
@@ -196,6 +205,9 @@ function App() {
       case 'notepad':
         handleOpenWindow(4);
         break;
+      case 'resume':
+        handleOpenWindow(9);
+        break;
 
       default:
         console.log('Unknown action:', action);
@@ -213,7 +225,8 @@ function App() {
       2: { x: startX, y: startY + spacing },
       3: { x: startX, y: startY + spacing * 2 },
       4: { x: startX, y: startY + spacing * 3 },
-      5: { x: startX, y: startY + spacing * 4 },
+      9: { x: startX, y: startY + spacing * 4 }, // Resume
+      8: { x: startX, y: startY + spacing * 5 }, // Recycle Bin
     };
   });
 
@@ -222,7 +235,8 @@ function App() {
     { id: 2, label: 'My Documents', icon: folderIcon },
     { id: 3, label: 'Internet Explorer', icon: ieIcon },
     { id: 4, label: 'Notepad', icon: notepadIcon },
-    { id: 5, label: 'Recycle Bin', icon: recycleBinIcon },
+    { id: 9, label: 'My Resume', icon: notepadIcon },
+    { id: 8, label: 'Recycle Bin', icon: recycleBinIcon },
   ];
 
   const handleIconPositionChange = (iconId: number, position: { x: number; y: number }) => {
@@ -245,9 +259,7 @@ function App() {
             onPositionChange={(pos) => handleIconPositionChange(icon.id, pos)}
             onClick={(e) => { e?.stopPropagation(); setSelectedIconId(icon.id); }}
             onDoubleClick={() => {
-              // Map icon IDs to window IDs
-              if (icon.id <= 4) handleOpenWindow(icon.id);
-              if (icon.id === 5) handleOpenWindow(8); // Recycle Bin
+              handleOpenWindow(icon.id);
             }}
           />
         ))}
