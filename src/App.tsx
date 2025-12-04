@@ -154,15 +154,6 @@ function App() {
     }
   }, [systemState]);
 
-  // Sound Effects
-  useEffect(() => {
-    if (systemState === 'shutting_down') {
-      playSystemSound('shutdown');
-    } else if (systemState === 'logging_off') {
-      playSystemSound('logoff');
-    }
-  }, [systemState]);
-
   // Initial Startup Sound
   useEffect(() => {
     // Play startup sound on initial load
@@ -344,7 +335,7 @@ function App() {
     <>
       {/* System Screens */}
       {systemState === 'logged_out' && (
-        <LoginScreen onLogin={() => setSystemState('desktop')} />
+        <LoginScreen onLogin={() => { playSystemSound('startup'); setSystemState('desktop'); }} />
       )}
 
       {systemState === 'turned_off' && (

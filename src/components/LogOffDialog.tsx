@@ -2,6 +2,7 @@ import React from 'react';
 import logOffIcon from '../assets/xp_icon_logoff.png';
 import switchUserBtn from '../assets/xp_btn_switchuser.png';
 import logOffBtn from '../assets/xp_btn_logoff.png';
+import { playSystemSound } from '../utils/soundManager';
 
 interface LogOffDialogProps {
     onCancel: () => void;
@@ -96,7 +97,7 @@ const LogOffDialog: React.FC<LogOffDialogProps> = ({ onCancel, onLogOff, onSwitc
                             </div>
 
                             {/* Log Off Button */}
-                            <div className="logoff-btn" onClick={onLogOff}>
+                            <div className="logoff-btn" onClick={() => { playSystemSound('logoff'); onLogOff(); }}>
                                 <div className="logoff-icon-wrapper">
                                     <img src={logOffBtn} alt="Log Off" className="logoff-icon" />
                                 </div>

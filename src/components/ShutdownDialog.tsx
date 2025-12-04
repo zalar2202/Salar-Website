@@ -3,6 +3,7 @@ import turnOffIcon from '../assets/xp_icon_turnoff.png';
 import standbyBtn from '../assets/xp_btn_standby.png';
 import turnOffBtn from '../assets/xp_btn_turnoff.png';
 import restartBtn from '../assets/xp_btn_restart.png';
+import { playSystemSound } from '../utils/soundManager';
 
 interface ShutdownDialogProps {
     onCancel: () => void;
@@ -98,7 +99,7 @@ const ShutdownDialog: React.FC<ShutdownDialogProps> = ({ onCancel, onShutdown, o
                             </div>
 
                             {/* Turn Off Button */}
-                            <div className="shutdown-btn" onClick={onShutdown}>
+                            <div className="shutdown-btn" onClick={() => { playSystemSound('shutdown'); onShutdown(); }}>
                                 <div className="shutdown-icon-wrapper">
                                     <img src={turnOffBtn} alt="Turn Off" className="shutdown-icon" />
                                 </div>
@@ -106,7 +107,7 @@ const ShutdownDialog: React.FC<ShutdownDialogProps> = ({ onCancel, onShutdown, o
                             </div>
 
                             {/* Restart Button */}
-                            <div className="shutdown-btn" onClick={onRestart}>
+                            <div className="shutdown-btn" onClick={() => { playSystemSound('shutdown'); onRestart(); }}>
                                 <div className="shutdown-icon-wrapper">
                                     <img src={restartBtn} alt="Restart" className="shutdown-icon" />
                                 </div>
