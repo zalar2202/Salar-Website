@@ -3,6 +3,7 @@ import ieIcon from '../assets/xp_ie_icon.png';
 import notepadIcon from '../assets/xp_notepad_icon.png';
 import calculatorIcon from '../assets/xp_calculator_icon.png';
 import wmpIcon from '../assets/xp_wmp_icon.png';
+import solitaireIcon from '../assets/xp_solitaire_icon.png';
 import paintIcon from '../assets/xp_paint_icon.png';
 import folderIcon from '../assets/xp_folder_icon.png';
 import myComputerIcon from '../assets/xp_my_computer_icon.png';
@@ -17,7 +18,6 @@ import helpIcon from '../assets/xp_help_icon.png';
 import searchIcon from '../assets/xp_search_icon.png';
 import runIcon from '../assets/xp_run_icon.png';
 import minesweeperIcon from '../assets/xp_minesweeper_icon.png';
-import solitaireIcon from '../assets/xp_solitaire_icon.png';
 
 interface StartMenuProps {
     isOpen: boolean;
@@ -210,6 +210,7 @@ const StartMenu: React.FC<StartMenuProps> = ({ isOpen, onItemClick }) => {
                                         { name: 'Paint', icon: paintIcon, action: 'paint' },
                                         { name: 'Calculator', icon: calculatorIcon, action: 'calculator' },
                                         { name: 'Windows Media Player', icon: wmpIcon, action: 'media-player' },
+                                        { name: 'Solitaire', icon: solitaireIcon, action: 'solitaire' },
                                     ].map((app, ai) => (
                                         <div key={ai} style={{
                                             padding: '5px',
@@ -305,6 +306,7 @@ const StartMenu: React.FC<StartMenuProps> = ({ isOpen, onItemClick }) => {
                         { name: 'Minesweeper', icon: minesweeperIcon, desc: 'Play Minesweeper', action: 'minesweeper' },
                         { name: 'Calculator', icon: calculatorIcon, desc: 'Perform calculations', action: 'calculator' },
                         { name: 'Windows Media Player', icon: wmpIcon, desc: 'Play audio and video files', action: 'media-player' },
+                        { name: 'Solitaire', icon: solitaireIcon, desc: 'Classic card game', action: 'solitaire' },
                     ].map((app, i) => (
                         <div key={i} style={{
                             padding: '5px',

@@ -13,6 +13,7 @@ import MyComputer from './components/apps/MyComputer';
 import RecycleBin from './components/apps/RecycleBin';
 import Resume from './components/apps/Resume';
 import WindowsMediaPlayer from './components/apps/WindowsMediaPlayer';
+import Solitaire from './components/apps/Solitaire';
 import AuthenticPopup from './components/AuthenticPopup';
 import ShutdownDialog from './components/ShutdownDialog';
 import LogOffDialog from './components/LogOffDialog';
@@ -31,6 +32,7 @@ import emailIcon from './assets/xp_email_icon.png';
 import minesweeperIcon from './assets/xp_minesweeper_icon.png';
 import calculatorIcon from './assets/xp_calculator_icon.png';
 import wmpIcon from './assets/xp_wmp_icon.png';
+import solitaireIcon from './assets/xp_solitaire_icon.png';
 // Recycle bin - using empty icon by default
 const recycleBinIcon = recycleBinEmptyIcon;
 
@@ -135,6 +137,15 @@ function App() {
       isMinimized: false,
       zIndex: 0,
       icon: wmpIcon
+    },
+    {
+      id: 11,
+      title: 'Solitaire',
+      content: <Solitaire />,
+      isOpen: false,
+      isMinimized: false,
+      zIndex: 0,
+      icon: solitaireIcon
     }
   ]);
 
@@ -280,6 +291,9 @@ function App() {
       case 'media-player':
         handleOpenWindow(10);
         break;
+      case 'solitaire':
+        handleOpenWindow(11);
+        break;
       case 'my-network-places':
         handleShowPopup('Network discovery is disabled by your administrator.', 'Network Error', 'error');
         break;
@@ -325,8 +339,11 @@ function App() {
       3: { x: startX, y: startY + spacing * 2 },
       4: { x: startX, y: startY + spacing * 3 },
       9: { x: startX, y: startY + spacing * 4 }, // Resume
-      10: { x: startX, y: startY + spacing * 5 }, // Media Player
-      8: { x: startX, y: startY + spacing * 6 }, // Recycle Bin
+
+      // Column 2
+      10: { x: startX + spacing, y: startY }, // Media Player
+      11: { x: startX + spacing, y: startY + spacing }, // Solitaire
+      8: { x: startX + spacing, y: startY + spacing * 2 }, // Recycle Bin
     };
   });
 
@@ -337,6 +354,7 @@ function App() {
     { id: 4, label: 'Notepad', icon: notepadIcon },
     { id: 9, label: 'My Resume', icon: notepadIcon },
     { id: 10, label: 'Media Player', icon: wmpIcon },
+    { id: 11, label: 'Solitaire', icon: solitaireIcon },
     { id: 8, label: 'Recycle Bin', icon: recycleBinIcon },
   ];
 
