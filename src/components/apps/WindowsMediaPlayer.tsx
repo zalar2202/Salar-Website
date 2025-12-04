@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import demoVideo from '../../assets/videos/demo.mp4';
 
 const WindowsMediaPlayer: React.FC = () => {
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -14,14 +13,28 @@ const WindowsMediaPlayer: React.FC = () => {
         if (!video) return;
 
         const updateTime = () => setCurrentTime(video.currentTime);
-        const updateDuration = () => setDuration(video.duration);
+        const updateDuration = () => {
+            if (video.duration && !isNaN(video.duration)) {
+                setDuration(video.duration);
+            }
+        };
+        const handleError = (e: Event) => {
+            console.error('Video error:', e);
+        };
 
         video.addEventListener('timeupdate', updateTime);
         video.addEventListener('loadedmetadata', updateDuration);
+        video.addEventListener('error', handleError);
+        video.addEventListener('canplay', updateDuration);
+
+        // Force load
+        video.load();
 
         return () => {
             video.removeEventListener('timeupdate', updateTime);
             video.removeEventListener('loadedmetadata', updateDuration);
+            video.removeEventListener('error', handleError);
+            video.removeEventListener('canplay', updateDuration);
         };
     }, []);
 
@@ -123,7 +136,12 @@ const WindowsMediaPlayer: React.FC = () => {
                 }}>
                     <video
                         ref={videoRef}
-                        src={demoVideo}
+                        src="/videos/demo.mp4"
+                        preload="metadata"
+                        playsInline
+                        webkit-playsinline="true"
+                        controls
+                        loop
                         style={{
                             maxWidth: '100%',
                             maxHeight: '100%',
