@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ieIcon from '../assets/xp_ie_icon.png';
 import notepadIcon from '../assets/xp_notepad_icon.png';
 import calculatorIcon from '../assets/xp_calculator_icon.png';
+import wmpIcon from '../assets/xp_wmp_icon.png';
 import paintIcon from '../assets/xp_paint_icon.png';
 import folderIcon from '../assets/xp_folder_icon.png';
 import myComputerIcon from '../assets/xp_my_computer_icon.png';
@@ -208,6 +209,7 @@ const StartMenu: React.FC<StartMenuProps> = ({ isOpen, onItemClick }) => {
                                         { name: 'Notepad', icon: notepadIcon, action: 'notepad' },
                                         { name: 'Paint', icon: paintIcon, action: 'paint' },
                                         { name: 'Calculator', icon: calculatorIcon, action: 'calculator' },
+                                        { name: 'Windows Media Player', icon: wmpIcon, action: 'media-player' },
                                     ].map((app, ai) => (
                                         <div key={ai} style={{
                                             padding: '5px',
@@ -302,6 +304,7 @@ const StartMenu: React.FC<StartMenuProps> = ({ isOpen, onItemClick }) => {
                         { name: 'E-mail', icon: emailIcon, desc: 'E-mail program', action: 'email' },
                         { name: 'Minesweeper', icon: minesweeperIcon, desc: 'Play Minesweeper', action: 'minesweeper' },
                         { name: 'Calculator', icon: calculatorIcon, desc: 'Perform calculations', action: 'calculator' },
+                        { name: 'Windows Media Player', icon: wmpIcon, desc: 'Play audio and video files', action: 'media-player' },
                     ].map((app, i) => (
                         <div key={i} style={{
                             padding: '5px',

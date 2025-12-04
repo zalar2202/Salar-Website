@@ -12,6 +12,7 @@ import MyDocuments from './components/apps/MyDocuments';
 import MyComputer from './components/apps/MyComputer';
 import RecycleBin from './components/apps/RecycleBin';
 import Resume from './components/apps/Resume';
+import WindowsMediaPlayer from './components/apps/WindowsMediaPlayer';
 import AuthenticPopup from './components/AuthenticPopup';
 import ShutdownDialog from './components/ShutdownDialog';
 import LogOffDialog from './components/LogOffDialog';
@@ -29,6 +30,7 @@ import recycleBinEmptyIcon from './assets/xp_recycle_bin_empty.png';
 import emailIcon from './assets/xp_email_icon.png';
 import minesweeperIcon from './assets/xp_minesweeper_icon.png';
 import calculatorIcon from './assets/xp_calculator_icon.png';
+import wmpIcon from './assets/xp_wmp_icon.png';
 // Recycle bin - using empty icon by default
 const recycleBinIcon = recycleBinEmptyIcon;
 
@@ -124,6 +126,15 @@ function App() {
       isMinimized: false,
       zIndex: 0,
       icon: notepadIcon // Using notepad icon for text file look
+    },
+    {
+      id: 10,
+      title: 'Windows Media Player',
+      content: <WindowsMediaPlayer />,
+      isOpen: false,
+      isMinimized: false,
+      zIndex: 0,
+      icon: wmpIcon
     }
   ]);
 
@@ -266,6 +277,9 @@ function App() {
       case 'resume':
         handleOpenWindow(9);
         break;
+      case 'media-player':
+        handleOpenWindow(10);
+        break;
       case 'my-network-places':
         handleShowPopup('Network discovery is disabled by your administrator.', 'Network Error', 'error');
         break;
@@ -311,7 +325,8 @@ function App() {
       3: { x: startX, y: startY + spacing * 2 },
       4: { x: startX, y: startY + spacing * 3 },
       9: { x: startX, y: startY + spacing * 4 }, // Resume
-      8: { x: startX, y: startY + spacing * 5 }, // Recycle Bin
+      10: { x: startX, y: startY + spacing * 5 }, // Media Player
+      8: { x: startX, y: startY + spacing * 6 }, // Recycle Bin
     };
   });
 
@@ -321,6 +336,7 @@ function App() {
     { id: 3, label: 'Internet Explorer', icon: ieIcon },
     { id: 4, label: 'Notepad', icon: notepadIcon },
     { id: 9, label: 'My Resume', icon: notepadIcon },
+    { id: 10, label: 'Media Player', icon: wmpIcon },
     { id: 8, label: 'Recycle Bin', icon: recycleBinIcon },
   ];
 
