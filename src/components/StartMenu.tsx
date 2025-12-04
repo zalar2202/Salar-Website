@@ -149,7 +149,7 @@ const StartMenu: React.FC<StartMenuProps> = ({ isOpen, onItemClick }) => {
                                 }}>
                                     {[
                                         { name: 'Minesweeper', icon: minesweeperIcon, action: 'minesweeper' },
-                                        { name: 'Solitaire', icon: solitaireIcon, action: null },
+                                        { name: 'Solitaire', icon: solitaireIcon, action: 'solitaire' },
                                     ].map((game, gi) => (
                                         <div key={gi} style={{
                                             padding: '5px',
@@ -366,12 +366,12 @@ const StartMenu: React.FC<StartMenuProps> = ({ isOpen, onItemClick }) => {
                     {[
                         { name: 'My Documents', icon: folderIcon, bold: true, action: 'my-documents' },
                         { name: 'My Computer', icon: myComputerIcon, bold: true, action: 'my-computer' },
-                        { name: 'My Network Places', icon: networkIcon, bold: false, action: null },
-                        { name: 'Control Panel', icon: controlPanelIcon, bold: false, action: null },
-                        { name: 'Printers and Faxes', icon: printerIcon, bold: false, action: null },
-                        { name: 'Help and Support', icon: helpIcon, bold: false, action: null },
-                        { name: 'Search', icon: searchIcon, bold: false, action: null },
-                        { name: 'Run...', icon: runIcon, bold: false, action: null }
+                        { name: 'My Network Places', icon: networkIcon, bold: false, action: 'my-network-places' },
+                        { name: 'Control Panel', icon: controlPanelIcon, bold: false, action: 'control-panel' },
+                        { name: 'Printers and Faxes', icon: printerIcon, bold: false, action: 'printers' },
+                        { name: 'Help and Support', icon: helpIcon, bold: false, action: 'help' },
+                        { name: 'Search', icon: searchIcon, bold: false, action: 'search' },
+                        { name: 'Run...', icon: runIcon, bold: false, action: 'run' }
                     ].map((item, i) => (
                         <div key={i} style={{
                             padding: '5px',
@@ -426,7 +426,7 @@ const StartMenu: React.FC<StartMenuProps> = ({ isOpen, onItemClick }) => {
                     color: 'white',
                     cursor: 'pointer',
                     marginRight: '10px'
-                }}>
+                }} onClick={() => onItemClick('log-off')}>
                     <img src={logOffIcon} alt="Log Off" style={{ width: '20px', height: '20px', marginRight: '5px' }} />
                     Log Off
                 </button>
@@ -437,7 +437,7 @@ const StartMenu: React.FC<StartMenuProps> = ({ isOpen, onItemClick }) => {
                     border: 'none',
                     color: 'white',
                     cursor: 'pointer'
-                }}>
+                }} onClick={() => onItemClick('turn-off')}>
                     <img src={turnOffIcon} alt="Turn Off" style={{ width: '20px', height: '20px', marginRight: '5px' }} />
                     Turn Off Computer
                 </button>

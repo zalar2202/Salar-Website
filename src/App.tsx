@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Desktop from './components/Desktop';
 import DesktopIcon from './components/DesktopIcon';
 import Window from './components/Window';
@@ -12,6 +12,13 @@ import MyDocuments from './components/apps/MyDocuments';
 import MyComputer from './components/apps/MyComputer';
 import RecycleBin from './components/apps/RecycleBin';
 import Resume from './components/apps/Resume';
+import AuthenticPopup from './components/AuthenticPopup';
+import ShutdownDialog from './components/ShutdownDialog';
+import LogOffDialog from './components/LogOffDialog';
+import LoginScreen from './components/LoginScreen';
+import TurnedOffScreen from './components/TurnedOffScreen';
+import BootScreen from './components/BootScreen';
+import { playSystemSound } from './utils/soundManager';
 
 // Assets
 import myComputerIcon from './assets/xp_my_computer_icon.png';
@@ -125,6 +132,64 @@ function App() {
   const [selectedIconId, setSelectedIconId] = useState<number | null>(null);
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
 
+  // System State
+  const [systemState, setSystemState] = useState<'desktop' | 'logging_off' | 'logged_out' | 'shutting_down' | 'turned_off' | 'restarting_shutdown' | 'restarting_boot'>('desktop');
+
+  // Restart Sequence Effect
+  useEffect(() => {
+    if (systemState === 'restarting_shutdown') {
+      // Step 1: "Windows is shutting down..." for 2 seconds
+      const timer1 = setTimeout(() => {
+        setSystemState('restarting_boot');
+      }, 2000);
+      return () => clearTimeout(timer1);
+    }
+
+    if (systemState === 'restarting_boot') {
+      // Step 2: Boot Screen for 4 seconds
+      const timer2 = setTimeout(() => {
+        setSystemState('logged_out'); // Land on Login Screen
+      }, 4000);
+      return () => clearTimeout(timer2);
+    }
+  }, [systemState]);
+
+  // Sound Effects
+  useEffect(() => {
+    if (systemState === 'shutting_down') {
+      playSystemSound('shutdown');
+    } else if (systemState === 'logging_off') {
+      playSystemSound('logoff');
+    }
+  }, [systemState]);
+
+  // Initial Startup Sound
+  useEffect(() => {
+    // Play startup sound on initial load
+    playSystemSound('startup');
+  }, []);
+
+  const [popupState, setPopupState] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    type: 'error' | 'info' | 'warning';
+  }>({
+    isOpen: false,
+    title: 'Error',
+    message: '',
+    type: 'error'
+  });
+
+  const handleShowPopup = (message: string, title: string = 'Error', type: 'error' | 'info' | 'warning' = 'error') => {
+    setPopupState({
+      isOpen: true,
+      title,
+      message,
+      type
+    });
+  };
+
   const handleOpenWindow = (id: number) => {
     setWindows(prev => prev.map(w => {
       if (w.id === id) {
@@ -202,11 +267,40 @@ function App() {
         handleOpenWindow(7);
         break;
       case 'paint':
+        handleShowPopup('Paint is not yet installed on this system.', 'Paint', 'info');
+        break;
       case 'notepad':
         handleOpenWindow(4);
         break;
       case 'resume':
         handleOpenWindow(9);
+        break;
+      case 'my-network-places':
+        handleShowPopup('Network discovery is disabled by your administrator.', 'Network Error', 'error');
+        break;
+      case 'control-panel':
+        handleShowPopup('Access to Control Panel is restricted.', 'System Restriction', 'warning');
+        break;
+      case 'printers':
+        handleShowPopup('The printer spooler service is not running.', 'Printer Error', 'error');
+        break;
+      case 'help':
+        handleShowPopup('Help and Support Center could not be started because a required component is missing.', 'Help and Support', 'error');
+        break;
+      case 'search':
+        handleShowPopup('The search companion is currently unavailable.', 'Search', 'info');
+        break;
+      case 'run':
+        handleShowPopup('This operation has been cancelled due to restrictions in effect on this computer.', 'Restrictions', 'error');
+        break;
+      case 'solitaire':
+        handleShowPopup('Solitaire.exe not found. Please reinstall the game.', 'Solitaire', 'error');
+        break;
+      case 'log-off':
+        setSystemState('logging_off');
+        break;
+      case 'turn-off':
+        setSystemState('shutting_down');
         break;
 
       default:
@@ -248,48 +342,125 @@ function App() {
 
   return (
     <>
-      <Desktop onBackgroundClick={() => { setSelectedIconId(null); setIsStartMenuOpen(false); }}>
-        {desktopIcons.map(icon => (
-          <DesktopIcon
-            key={icon.id}
-            label={icon.label}
-            icon={icon.icon}
-            selected={selectedIconId === icon.id}
-            position={iconPositions[icon.id]}
-            onPositionChange={(pos) => handleIconPositionChange(icon.id, pos)}
-            onClick={(e) => { e?.stopPropagation(); setSelectedIconId(icon.id); }}
-            onDoubleClick={() => {
-              handleOpenWindow(icon.id);
-            }}
-          />
-        ))}
+      {/* System Screens */}
+      {systemState === 'logged_out' && (
+        <LoginScreen onLogin={() => setSystemState('desktop')} />
+      )}
 
-        {windows.map(win => (
-          win.isOpen && (
-            <Window
-              key={win.id}
-              id={win.id}
-              title={win.title}
-              isActive={activeWindowId === win.id}
-              isMinimized={win.isMinimized}
-              onClose={() => handleCloseWindow(win.id)}
-              onMinimize={() => handleMinimizeWindow(win.id)}
-              onFocus={() => handleFocusWindow(win.id)}
-              initialPosition={{ x: 50 + (win.id * 20), y: 50 + (win.id * 20) }}
-            >
-              {win.content}
-            </Window>
-          )
-        ))}
-      </Desktop>
+      {systemState === 'turned_off' && (
+        <TurnedOffScreen onRestart={() => window.location.reload()} />
+      )}
 
-      <Taskbar
-        openWindows={windows.filter(w => w.isOpen).map(w => ({ id: w.id, title: w.title, minimized: w.isMinimized, icon: w.icon }))}
-        activeWindowId={activeWindowId}
-        onWindowClick={handleTaskbarClick}
-        onStartMenuItemClick={handleStartMenuItemClick}
-        isStartOpen={isStartMenuOpen}
-        setIsStartOpen={setIsStartMenuOpen}
+      {/* Desktop Environment (Grayscale when dialogs are open) */}
+      <div style={{
+        height: '100vh',
+        width: '100vw',
+        filter: (systemState === 'shutting_down' || systemState === 'logging_off') ? 'grayscale(100%)' : 'none',
+        transition: 'filter 0.5s ease'
+      }}>
+        <Desktop onBackgroundClick={() => { setSelectedIconId(null); setIsStartMenuOpen(false); }}>
+          {desktopIcons.map(icon => (
+            <DesktopIcon
+              key={icon.id}
+              label={icon.label}
+              icon={icon.icon}
+              selected={selectedIconId === icon.id}
+              position={iconPositions[icon.id]}
+              onPositionChange={(pos) => handleIconPositionChange(icon.id, pos)}
+              onClick={(e) => { e?.stopPropagation(); setSelectedIconId(icon.id); }}
+              onDoubleClick={() => {
+                handleOpenWindow(icon.id);
+              }}
+            />
+          ))}
+
+          {windows.map(win => (
+            win.isOpen && (
+              <Window
+                key={win.id}
+                id={win.id}
+                title={win.title}
+                isActive={activeWindowId === win.id}
+                isMinimized={win.isMinimized}
+                onClose={() => handleCloseWindow(win.id)}
+                onMinimize={() => handleMinimizeWindow(win.id)}
+                onFocus={() => handleFocusWindow(win.id)}
+                initialPosition={{ x: 50 + (win.id * 20), y: 50 + (win.id * 20) }}
+              >
+                {win.content}
+              </Window>
+            )
+          ))}
+        </Desktop>
+
+        <Taskbar
+          openWindows={windows.filter(w => w.isOpen).map(w => ({ id: w.id, title: w.title, minimized: w.isMinimized, icon: w.icon }))}
+          activeWindowId={activeWindowId}
+          onWindowClick={handleTaskbarClick}
+          onStartMenuItemClick={handleStartMenuItemClick}
+          isStartOpen={isStartMenuOpen}
+          setIsStartOpen={setIsStartMenuOpen}
+        />
+      </div>
+
+      {/* Dialog Overlays */}
+      {systemState === 'shutting_down' && (
+        <ShutdownDialog
+          onCancel={() => setSystemState('desktop')}
+          onShutdown={() => setSystemState('turned_off')}
+          onRestart={() => setSystemState('restarting_shutdown')}
+          onStandby={() => setSystemState('desktop')} // Just close for now
+        />
+      )}
+
+      {/* Restarting Screens */}
+      {systemState === 'restarting_shutdown' && (
+        <div style={{
+          position: 'fixed',
+          top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: '#003399',
+          zIndex: 300000,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontFamily: 'Tahoma, sans-serif'
+        }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '15px'
+          }}>
+            <div style={{
+              fontFamily: 'Franklin Gothic Medium, Arial, sans-serif',
+              fontSize: '24px',
+              fontWeight: 'bold',
+              color: 'white',
+              fontStyle: 'italic'
+            }}>
+              Windows is shutting down...
+            </div>
+          </div>
+        </div>
+      )}
+
+      {systemState === 'restarting_boot' && (
+        <BootScreen />
+      )}
+
+      {systemState === 'logging_off' && (
+        <LogOffDialog
+          onCancel={() => setSystemState('desktop')}
+          onLogOff={() => setSystemState('logged_out')}
+          onSwitchUser={() => setSystemState('logged_out')}
+        />
+      )}
+
+      <AuthenticPopup
+        isOpen={popupState.isOpen}
+        onClose={() => setPopupState(prev => ({ ...prev, isOpen: false }))}
+        title={popupState.title}
+        message={popupState.message}
+        type={popupState.type}
       />
     </>
   );
