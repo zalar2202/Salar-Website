@@ -3,26 +3,8 @@ import Desktop from './components/Desktop';
 import DesktopIcon from './components/DesktopIcon';
 import Window from './components/Window';
 import Taskbar from './components/Taskbar';
-import Notepad from './components/apps/Notepad';
-import InternetExplorer from './components/apps/InternetExplorer';
-import Email from './components/apps/Email';
-import Minesweeper from './components/apps/Minesweeper';
-import Calculator from './components/apps/Calculator';
-import MyDocuments from './components/apps/MyDocuments';
-import MyComputer from './components/apps/MyComputer';
-import RecycleBin from './components/apps/RecycleBin';
-import Resume from './components/apps/Resume';
-import WindowsMediaPlayer from './components/apps/WindowsMediaPlayer';
-import Solitaire from './components/apps/Solitaire';
-import AuthenticPopup from './components/AuthenticPopup';
-import ShutdownDialog from './components/ShutdownDialog';
-import LogOffDialog from './components/LogOffDialog';
-import LoginScreen from './components/LoginScreen';
-import TurnedOffScreen from './components/TurnedOffScreen';
-import BootScreen from './components/BootScreen';
 import { playSystemSound } from './utils/soundManager';
 
-// Assets
 import myComputerIcon from './assets/xp_my_computer_icon.png';
 import ieIcon from './assets/xp_ie_icon.png';
 import notepadIcon from './assets/xp_notepad_icon.png';
@@ -33,6 +15,41 @@ import minesweeperIcon from './assets/xp_minesweeper_icon.png';
 import calculatorIcon from './assets/xp_calculator_icon.png';
 import wmpIcon from './assets/xp_wmp_icon.png';
 import solitaireIcon from './assets/xp_solitaire_icon.png';
+
+// Lazy load apps
+const Notepad = React.lazy(() => import('./components/apps/Notepad'));
+const InternetExplorer = React.lazy(() => import('./components/apps/InternetExplorer'));
+const Email = React.lazy(() => import('./components/apps/Email'));
+const Minesweeper = React.lazy(() => import('./components/apps/Minesweeper'));
+const Calculator = React.lazy(() => import('./components/apps/Calculator'));
+const MyDocuments = React.lazy(() => import('./components/apps/MyDocuments'));
+const MyComputer = React.lazy(() => import('./components/apps/MyComputer'));
+const RecycleBin = React.lazy(() => import('./components/apps/RecycleBin'));
+const Resume = React.lazy(() => import('./components/apps/Resume'));
+const WindowsMediaPlayer = React.lazy(() => import('./components/apps/WindowsMediaPlayer'));
+const Solitaire = React.lazy(() => import('./components/apps/Solitaire'));
+
+// Loading Fallback Component
+const AppLoadingData = () => (
+  <div style={{
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+    width: '100%',
+    color: '#000',
+    fontFamily: 'Tahoma'
+  }}>
+    Loading...
+  </div>
+);
+import AuthenticPopup from './components/AuthenticPopup';
+import ShutdownDialog from './components/ShutdownDialog';
+import LogOffDialog from './components/LogOffDialog';
+import LoginScreen from './components/LoginScreen';
+import TurnedOffScreen from './components/TurnedOffScreen';
+import BootScreen from './components/BootScreen';
+
 // Recycle bin - using empty icon by default
 const recycleBinIcon = recycleBinEmptyIcon;
 
@@ -312,9 +329,7 @@ function App() {
       case 'run':
         handleShowPopup('This operation has been cancelled due to restrictions in effect on this computer.', 'Restrictions', 'error');
         break;
-      case 'solitaire':
-        handleShowPopup('Solitaire.exe not found. Please reinstall the game.', 'Solitaire', 'error');
-        break;
+
       case 'log-off':
         setSystemState('logging_off');
         break;
@@ -412,7 +427,9 @@ function App() {
                 onFocus={() => handleFocusWindow(win.id)}
                 initialPosition={{ x: 50 + (win.id * 20), y: 50 + (win.id * 20) }}
               >
-                {win.content}
+                <React.Suspense fallback={<AppLoadingData />}>
+                  {win.content}
+                </React.Suspense>
               </Window>
             )
           ))}

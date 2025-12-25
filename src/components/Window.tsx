@@ -122,7 +122,8 @@ const Window: React.FC<WindowProps> = ({
                 left: isMaximized ? 0 : position.x,
                 top: isMaximized ? 0 : position.y,
                 width: isMaximized ? '100vw' : (isMobile ? 'calc(100vw - 20px)' : 'min(600px, 95vw)'),
-                height: isMaximized ? 'calc(100vh - 30px)' : (isMobile ? 'calc(100vh - 80px)' : 'min(400px, 80vh)'),
+                height: isMaximized ? 'calc(100vh - 30px)' : 'auto',
+                maxHeight: isMaximized ? 'none' : '80vh',
                 backgroundColor: '#0055EA',
                 border: isMaximized ? 'none' : '1px solid #00138C',
                 borderTopLeftRadius: isMaximized ? 0 : '8px',
@@ -150,17 +151,30 @@ const Window: React.FC<WindowProps> = ({
                     justifyContent: 'space-between',
                     padding: '0 5px',
                     cursor: 'default',
-                    userSelect: 'none'
+                    userSelect: 'none',
+                    flexWrap: 'nowrap' // Prevent wrapping
                 }}
             >
-                <div style={{ display: 'flex', alignItems: 'center', color: 'white', fontWeight: 'bold', fontSize: '13px', textShadow: '1px 1px 1px black' }}>
-                    <div style={{ width: '16px', height: '16px', backgroundColor: 'transparent', marginRight: '5px' }}>
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    color: 'white',
+                    fontWeight: 'bold',
+                    fontSize: '13px',
+                    textShadow: '1px 1px 1px black',
+                    overflow: 'hidden', // Handle long titles
+                    whiteSpace: 'nowrap',
+                    textOverflow: 'ellipsis',
+                    marginRight: '10px',
+                    minWidth: 0 // Allow flex item to shrink below content size
+                }}>
+                    <div style={{ width: '16px', height: '16px', backgroundColor: 'transparent', marginRight: '5px', flexShrink: 0 }}>
                         {/* Icon placeholder */}
                     </div>
-                    {title}
+                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</span>
                 </div>
 
-                <div style={{ display: 'flex', gap: '2px', paddingRight: '2px' }}>
+                <div style={{ display: 'flex', gap: '2px', paddingRight: '2px', flexShrink: 0 }}>
                     <button
                         onClick={(e) => { e.stopPropagation(); onMinimize(); }}
                         style={{
